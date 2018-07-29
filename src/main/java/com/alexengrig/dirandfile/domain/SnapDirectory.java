@@ -1,5 +1,6 @@
 package com.alexengrig.dirandfile.domain;
 
+import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
@@ -9,7 +10,13 @@ import java.util.Set;
  *
  * @author G. Alex
  */
+@Entity
+@Table(name = "dir")
 public class SnapDirectory {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     /**
      * Path to directory
@@ -33,9 +40,17 @@ public class SnapDirectory {
      */
     private long totalSize;
 
+    /**
+     * Nested files
+     */
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "dir_id")
     private Set<SnapFile> files;
 
     /* Constructors */
+
+    public SnapDirectory() {
+    }
 
     /**
      * Create snapshot of directory, with path to directory and date of snapshot
@@ -110,6 +125,25 @@ public class SnapDirectory {
                 ", totalSize=" + totalSize +
                 ", files=" + files.stream().map(Objects::toString).reduce(String::concat) +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SnapDirectory that = (SnapDirectory) o;
+        return numDirs == that.numDirs &&
+                numFiles == that.numFiles &&
+                totalSize == that.totalSize &&
+                Objects.equals(id, that.id) &&
+                Objects.equals(path, that.path) &&
+                Objects.equals(date, that.date) &&
+                Objects.equals(files, that.files);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, path, date, numDirs, numFiles, totalSize, files);
     }
 
 }

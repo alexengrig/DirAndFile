@@ -1,11 +1,20 @@
 package com.alexengrig.dirandfile.domain;
 
+import javax.persistence.*;
+import java.util.Objects;
+
 /**
  * Snapshot of file
  *
  * @author G. Alex
  */
+@Entity
+@Table(name = "file")
 public class SnapFile {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     /**
      * File name
@@ -21,6 +30,9 @@ public class SnapFile {
     private boolean isDirectory;
 
     /* Constructors */
+
+    public SnapFile() {
+    }
 
     /**
      * Create snapshot of file, with file name, file size and mark file is directory
@@ -70,6 +82,21 @@ public class SnapFile {
                 ", size=" + size +
                 ", isDirectory=" + isDirectory +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SnapFile snapFile = (SnapFile) o;
+        return size == snapFile.size &&
+                isDirectory == snapFile.isDirectory &&
+                Objects.equals(name, snapFile.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, size, isDirectory);
     }
 
 }
