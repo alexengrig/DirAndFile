@@ -1,0 +1,50 @@
+table {
+    border-collapse: collapse;
+    border: 2px solid black;
+    width: 100%;
+}
+
+th {
+    background: darkgray;
+    border-left: 2px solid black;
+    padding: 4px;
+}
+
+td {
+    border-left: 2px solid black;
+    padding: 4px;
+}
+
+tr:nth-child(odd) {
+    background: lightgray;
+}
+
+tr:hover {
+    background: gray;
+}
+
+.modal {
+    display: none;
+    position: absolute;
+    background: white;
+    left: 10%;
+    top: 10%;
+}
+
+.modal-context {
+    border: 2px solid black;
+    padding: 5px;
+}
+
+.modal-caption {
+    border-top: 2px solid black;
+    border-left: 2px solid black;
+    border-right: 2px solid black;
+    padding: 5px;
+}
+
+.modal-button-close {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+}
