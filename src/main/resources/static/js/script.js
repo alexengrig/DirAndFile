@@ -1,7 +1,7 @@
-var modals = document.getElementsByClassName("modal");
+var modals = document.getElementsByClassName("modal-window");
 
 function showModel(id) {
-    for (i = 0; i < modals.length; i++) {
+    for (var i = 0; i < modals.length; i++) {
         hideModel(modals[i].id);
     }
     var modal = document.getElementById(id);
