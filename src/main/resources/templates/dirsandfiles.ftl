@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Директории и файлы</title>
-    <link href="/css/style.css" rel="stylesheet" type="text/css">
-    <script src="/js/script.js"></script>
+    <link href="/static/css/style.css" rel="stylesheet" type="text/css">
+    <script src="/static/js/script.js"></script>
 </head>
 <body>
 <h1>Директории и файлы</h1>
 <div>
-    <form method="post">
+    <form method="post" action="/dirs_and_files/addDir">
         <label>
-            Новая директория:
+            <b>Новая директория:</b>
             <input type="text" name="path">
         </label>
         <button type="submit">Добавить в список</button>
@@ -42,9 +42,9 @@
                 <button class="modal-button-open" onclick="showModel('modal${dir_index}')">
                     Файлы
                 </button>
-                <div class="modal" id="modal${dir_index}">
-                    <div class="modal-caption">${dir.path} ${dir.date?string("dd.MM.yyyy HH:mm")}</div>
-                    <div class="modal-context">
+                <div class="modal-window" id="modal${dir_index}">
+                    <div class="modal-head">${dir.path} ${dir.date?string("dd.MM.yyyy HH:mm")}</div>
+                    <div class="modal-body">
                         <table>
                             <thead>
                             <tr>
@@ -53,27 +53,29 @@
                             </tr>
                             </thead>
                             <tbody>
-                        <#list dir.files as file>
-                        <tr>
-                            <td>${file.name}</td>
-                            <td>
-                                <#if file.directory>
-                                    &lt;DIR&gt;
-                                <#else>
-                                    ${file.size}
-                                </#if>
-                            </td>
-                        </tr>
-                        </#list>
+                                <#list dir.files as file>
+                                <tr>
+                                    <td>${file.name}</td>
+                                    <td>
+                                    <#if file.directory>
+                                        &lt;DIR&gt;
+                                    <#else>
+                                        ${file.sizeString}
+                                    </#if>
+                                    </td>
+                                </tr>
+                                </#list>
                             </tbody>
                         </table>
-                        <button class="modal-button-close" onclick="hideModel('modal${dir_index}')">
-                            Закрыть
-                        </button>
                     </div>
-
+                    <button class="modal-button-close" onclick="hideModel('modal${dir_index}')">
+                        Закрыть
+                    </button>
                 </div>
-
+            <#--<form method="post" action="/dirs_and_files/deleteDir">-->
+            <#--<input type="hidden" name="dirId" value="${dir.id}">-->
+            <#--<button type="submit">Удалить</button>-->
+            <#--</form>-->
             </td>
         </tr>
         </#list>

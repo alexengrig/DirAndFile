@@ -1,9 +1,10 @@
 package com.alexengrig.dirandfile.domain;
 
+import com.alexengrig.dirandfile.util.ComparatorSnapFile;
+import org.hibernate.annotations.SortComparator;
+
 import javax.persistence.*;
-import java.util.Date;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Snapshot of directory
@@ -43,9 +44,10 @@ public class SnapDirectory {
     /**
      * Nested files
      */
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "dir_id")
-    private Set<SnapFile> files;
+    @SortComparator(ComparatorSnapFile.class)
+    private Set<SnapFile> files = new TreeSet<>();
 
     /* Constructors */
 
@@ -64,6 +66,14 @@ public class SnapDirectory {
     }
 
     /* Getters and Setters */
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getPath() {
         return path;

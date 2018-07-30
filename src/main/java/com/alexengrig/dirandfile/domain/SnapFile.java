@@ -1,5 +1,7 @@
 package com.alexengrig.dirandfile.domain;
 
+import com.alexengrig.dirandfile.util.ComparatorSnapFile;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -10,7 +12,7 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "file")
-public class SnapFile {
+public class SnapFile implements Comparable<SnapFile> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -49,6 +51,14 @@ public class SnapFile {
 
     /* Getters and Setters */
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -71,6 +81,21 @@ public class SnapFile {
 
     public void setDirectory(boolean directory) {
         isDirectory = directory;
+    }
+
+    public String getSizeString() {
+        String[] types = {"b", "Kb", "Mb", "Gb", "Pb"};
+        double fsize = size;
+        int delimiter = 1024;
+        int e;
+        for (e = 0; e < types.length; e++) {
+            if (fsize / delimiter < 1) {
+                break;
+            } else {
+                fsize /= delimiter;
+            }
+        }
+        return String.format("%.2f%s", fsize, types[e]);
     }
 
     /* Others */
@@ -99,4 +124,10 @@ public class SnapFile {
         return Objects.hash(name, size, isDirectory);
     }
 
+    /* Comparable */
+
+    @Override
+    public int compareTo(SnapFile o) {
+        return ComparatorSnapFile.defaultComparator.compare(this, o);
+    }
 }

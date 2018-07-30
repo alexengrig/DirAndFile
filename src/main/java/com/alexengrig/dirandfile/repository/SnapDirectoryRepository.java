@@ -9,4 +9,7 @@ import org.springframework.data.repository.CrudRepository;
  * @author G. Alex
  */
 public interface SnapDirectoryRepository extends CrudRepository<SnapDirectory, Long> {
+    Iterable<SnapDirectory> findByOrderByDateDesc();
+
+
 }
