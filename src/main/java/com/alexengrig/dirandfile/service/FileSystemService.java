@@ -19,20 +19,47 @@ import java.util.TreeSet;
 @Service
 public class FileSystemService {
 
+    /**
+     * Root путь
+     */
     @Value("${filesystem.path.root}")
     private String rootPath;
 
-    public SnapDirectory createSnapDirectory(String path) throws IOException {
-        if (path == null || path.isEmpty()) { // Если путь пустой
-            throw new IOException("Wrong path! Path to directory is empty: " + path);
+//    /**
+//     * Имя OS
+//     */
+//    @Value("#{systemProperties['os.name']}")
+//    private String os;
+
+    /**
+     * Относительный сепаратор
+     */
+    private String relativeSeparator;
+
+    public FileSystemService() {
+        relativeSeparator = System.getProperty("os.name").toLowerCase().contains("windows") ? "/" : "~/";
+    }
+
+    /**
+     * Создать снимок директории по пути к директории
+     *
+     * @param dirPath Путь к директории
+     * @return Снимок директории
+     */
+    public SnapDirectory createSnapDirectory(String dirPath) throws IOException {
+        if (dirPath == null || dirPath.isEmpty()) { // Если путь пустой
+            throw new IOException("Wrong path! Path to directory is empty: " + dirPath);
         }
+        String path = dirPath.replace("\\", "/");
         File fileDirectory;
-        if (path.startsWith("/")) {
-            fileDirectory = new File(rootPath, path); // Получили файл директории по относительному пути
+        if (path.equals(relativeSeparator)) { // Если указан корень
+            fileDirectory = new File(rootPath); // Получили корневую директорию
+        } else if (path.startsWith(relativeSeparator)) { // Если указан относительный путь
+            fileDirectory = new File(rootPath + File.separator
+                    , path.replaceFirst(relativeSeparator, "")); // Получили файл директории по относительному пути
         } else {
             fileDirectory = new File(path); // Получили файл директории по абсолютмному пути
         }
-
 
         if (!fileDirectory.exists()) { // Если файл не существует
             throw new IOException("Wrong path! Directory does not exist : " + path);
