@@ -7,42 +7,44 @@ import javax.persistence.*;
 import java.util.*;
 
 /**
- * Snapshot of directory
+ * Снимок директории в определенный момент времени
  *
  * @author G. Alex
  */
 @Entity
 @Table(name = "dir")
 public class SnapDirectory {
-
+    /**
+     * Ид
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     /**
-     * Path to directory
+     * Путь к директории
      */
     private String path;
     /**
-     * Date of snapshot
+     * Дата снимка
      */
     private Date date;
 
     /**
-     * Number of directories
+     * Кол-во вложенных директорий
      */
     private int numDirs;
     /**
-     * Number of files
+     * Кол-во вложенных файлов
      */
     private int numFiles;
     /**
-     * Total size of nested files
+     * Суммарный размер вложенных файлов
      */
     private long totalSize;
 
     /**
-     * Nested files
+     * Вложенные файлы
      */
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "dir_id")
@@ -55,10 +57,10 @@ public class SnapDirectory {
     }
 
     /**
-     * Create snapshot of directory, with path to directory and date of snapshot
+     * Создает снимок директории с путем к директории и датой снимка
      *
-     * @param path Path to directory
-     * @param date Date of snapshot
+     * @param path Путь к директории
+     * @param date Дата снимка
      */
     public SnapDirectory(String path, Date date) {
         this.path = path;

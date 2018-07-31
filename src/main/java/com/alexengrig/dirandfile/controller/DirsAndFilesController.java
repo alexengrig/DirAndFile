@@ -14,33 +14,42 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * Controller of dirs and files
- *
- * @author G. Alex
+ * Контроллер для работы с директориями и папками
  */
 @Controller
 @RequestMapping("/dirs_and_files")
 public class DirsAndFilesController {
 
     /**
-     * Repository of SnapDirectory
+     * Репозиторий директорий
      */
     private SnapDirectoryRepository directoryRepository;
-
+    /**
+     * Сервис файловой системы
+     */
     private FileSystemService fileSystemService;
 
+    /**
+     * Конструткор
+     */
     @Autowired
     public DirsAndFilesController(SnapDirectoryRepository directoryRepository, FileSystemService fileSystemService) {
         this.directoryRepository = directoryRepository;
         this.fileSystemService = fileSystemService;
     }
 
+    /**
+     * Главная
+     */
     @GetMapping
     public String main(Model model) {
         addAllDirectories(model);
         return "dirsandfiles";
     }
 
+    /**
+     * Добавить директорию по путю
+     */
     @PostMapping("addDir")
     public String addDirByPath(@RequestParam String path
             , Model model) {
@@ -55,6 +64,9 @@ public class DirsAndFilesController {
         return "dirsandfiles"; //"redirect:/dirs_and_files";
     }
 
+    /**
+     * Удалить директорию по id
+     */
     @PostMapping("deleteDir")
     public String deleteDir(@RequestParam(name = "dirId") SnapDirectory directory
             , Model model) {
@@ -64,11 +76,17 @@ public class DirsAndFilesController {
         return "dirsandfiles"; //"redirect:/dirs_and_files";
     }
 
+    /**
+     * Для перехода на главную
+     */
     @GetMapping("addDir")
     public String addDir() {
         return "redirect:/dirs_and_files";
     }
 
+    /**
+     * Для перехода на главную
+     */
     @GetMapping("deleteDir")
     public String deleteDir() {
         return "redirect:/dirs_and_files";

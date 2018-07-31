@@ -4,12 +4,15 @@ import com.alexengrig.dirandfile.domain.SnapDirectory;
 import org.springframework.data.repository.CrudRepository;
 
 /**
- * Repository of SnapDirectory
+ * Репозиторий снимков директорий
  *
  * @author G. Alex
  */
 public interface SnapDirectoryRepository extends CrudRepository<SnapDirectory, Long> {
-    Iterable<SnapDirectory> findByOrderByDateDesc();
 
+    /**
+     * Получить снимки директорий отсортированные по дате по убыванию
+     */
+    Iterable<SnapDirectory> findByOrderByDateDesc();
 
 }

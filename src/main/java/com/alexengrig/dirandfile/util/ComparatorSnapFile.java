@@ -5,10 +5,18 @@ import org.hibernate.validator.constraints.Range;
 
 import java.util.Comparator;
 
+/**
+ * Компаратор снимков директорий
+ */
 public class ComparatorSnapFile implements Comparator<SnapFile> {
-
+    /**
+     * Простой
+     */
     public static ComparatorSnapFile defaultComparator = new ComparatorSnapFile();
 
+    /**
+     * Сравнить два снимка файлов
+     */
     @Override
     public int compare(SnapFile o1, SnapFile o2) {
         // В начале списка выводятся директории, потом выводятся файлы
@@ -49,6 +57,13 @@ public class ComparatorSnapFile implements Comparator<SnapFile> {
         return 0;
     }
 
+    /**
+     * Пропустить в строке цифры
+     *
+     * @param value Строка
+     * @param start Начальный индекс
+     * @return Индекс который стоит после цифры
+     */
     private int skipDigits(String value, @Range(min = 0) int start) {
         int i = start;
         for (; i < value.length(); i++) {
@@ -59,6 +74,13 @@ public class ComparatorSnapFile implements Comparator<SnapFile> {
         return i;
     }
 
+    /**
+     * Получить целое положительное число из строки
+     *
+     * @param value Строка с числом
+     * @param start Начальный индекс
+     * @return Прочитанное число
+     */
     private int getDigit(String value, @Range(min = 0) int start) {
         StringBuilder builder = new StringBuilder();
         int i = start;

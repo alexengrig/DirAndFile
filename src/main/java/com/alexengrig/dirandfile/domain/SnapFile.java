@@ -6,28 +6,30 @@ import javax.persistence.*;
 import java.util.Objects;
 
 /**
- * Snapshot of file
+ * Снимок файла
  *
  * @author G. Alex
  */
 @Entity
 @Table(name = "file")
 public class SnapFile implements Comparable<SnapFile> {
-
+    /**
+     * Ид
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     /**
-     * File name
+     * Имя файла
      */
     private String name;
     /**
-     * File size
+     * Размер файла
      */
     private long size;
     /**
-     * File is a directory
+     * Файл является директорией
      */
     private boolean isDirectory;
 
@@ -37,11 +39,11 @@ public class SnapFile implements Comparable<SnapFile> {
     }
 
     /**
-     * Create snapshot of file, with file name, file size and mark file is directory
+     * Создает снимок файла с именем и размером файла, пометка о том что файл яляется директорией
      *
-     * @param name        File name
-     * @param size        File size
-     * @param isDirectory Mark that file is directory
+     * @param name        Имя файла
+     * @param size        Размер файла
+     * @param isDirectory Пометка о том что файл является директорией
      */
     public SnapFile(String name, long size, boolean isDirectory) {
         this.name = name;
@@ -83,6 +85,9 @@ public class SnapFile implements Comparable<SnapFile> {
         isDirectory = directory;
     }
 
+    /**
+     * Получить размер файла в строковом представлении с единицией измерения
+     */
     public String getSizeString() {
         String[] types = {"b", "Kb", "Mb", "Gb", "Pb"};
         double fsize = size;

@@ -15,8 +15,8 @@
             <input type="text" name="path">
         </label>
         <button type="submit">Добавить в список</button>
+        <i>${message!}</i>
     </form>
-${message!}
 </div>
 <div>
     <div><h3>Список директорий и файлов</h3></div>
@@ -43,6 +43,10 @@ ${message!}
                 <button class="modal-button-open" onclick="showModel('modal${dir_index}')">
                     Файлы
                 </button>
+                <form method="post" action="/dirs_and_files/deleteDir">
+                    <input type="hidden" name="dirId" value="${dir.id?string("#")}">
+                    <button type="submit">Удалить</button>
+                </form>
                 <div class="modal-window" id="modal${dir_index}">
                     <div class="modal-head">
                         <b>${dir.path} ${dir.date?string("dd.MM.yyyy HH:mm")}</b>
@@ -81,20 +85,9 @@ ${message!}
                         Закрыть
                     </button>
                 </div>
-                <form method="post" action="/dirs_and_files/deleteDir">
-                    <input type="hidden" name="dirId" value="${dir.id?string("#")}">
-                    <button type="submit">Удалить</button>
-                </form>
+
             </td>
         <#else>
-        <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
         <tr>
             <td>&nbsp;</td>
             <td>&nbsp;</td>

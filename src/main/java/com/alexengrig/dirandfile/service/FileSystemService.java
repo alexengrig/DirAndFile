@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * Интерфейс файловой системы
+ * Сервис для работы с файловой системой
  */
 @Service
 public class FileSystemService {
