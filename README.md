@@ -7,3 +7,7 @@ filesystem.path.root=c: # корень, для относительных пут
 
 Для windows относительный путь начинается с /  
 Для linux относительный путь начинается с ~/  
+
+Клонировать проект в Intellij idea.  
+Собрать с помощью Maven.  
+Запустить с помощью JRE: java -jar dirandfile-1.0-SNAPSHOT.jar
