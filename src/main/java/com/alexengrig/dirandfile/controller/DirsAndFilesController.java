@@ -52,7 +52,7 @@ public class DirsAndFilesController {
         }
 
         addAllDirectories(model);
-        return "redirect:/dirs_and_files";
+        return "dirsandfiles"; //"redirect:/dirs_and_files";
     }
 
     @PostMapping("deleteDir")
@@ -61,6 +61,16 @@ public class DirsAndFilesController {
         directoryRepository.delete(directory);
 
         addAllDirectories(model);
+        return "dirsandfiles"; //"redirect:/dirs_and_files";
+    }
+
+    @GetMapping("addDir")
+    public String addDir() {
+        return "redirect:/dirs_and_files";
+    }
+
+    @GetMapping("deleteDir")
+    public String deleteDir() {
         return "redirect:/dirs_and_files";
     }
 

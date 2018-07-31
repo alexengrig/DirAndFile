@@ -16,6 +16,7 @@
         </label>
         <button type="submit">Добавить в список</button>
     </form>
+${message!}
 </div>
 <div>
     <div><h3>Список директорий и файлов</h3></div>
@@ -43,7 +44,9 @@
                     Файлы
                 </button>
                 <div class="modal-window" id="modal${dir_index}">
-                    <div class="modal-head">${dir.path} ${dir.date?string("dd.MM.yyyy HH:mm")}</div>
+                    <div class="modal-head">
+                        <b>${dir.path} ${dir.date?string("dd.MM.yyyy HH:mm")}</b>
+                    </div>
                     <div class="modal-body">
                         <table>
                             <thead>
@@ -64,7 +67,13 @@
                                     </#if>
                                     </td>
                                 </tr>
+                                <#else>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
                                 </#list>
+
                             </tbody>
                         </table>
                     </div>
@@ -72,11 +81,27 @@
                         Закрыть
                     </button>
                 </div>
-            <#--<form method="post" action="/dirs_and_files/deleteDir">-->
-            <#--<input type="hidden" name="dirId" value="${dir.id}">-->
-            <#--<button type="submit">Удалить</button>-->
-            <#--</form>-->
+                <form method="post" action="/dirs_and_files/deleteDir">
+                    <input type="hidden" name="dirId" value="${dir.id?string("#")}">
+                    <button type="submit">Удалить</button>
+                </form>
             </td>
+        <#else>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
         </tr>
         </#list>
         </tbody>
