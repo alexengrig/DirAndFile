@@ -5,65 +5,72 @@ import org.hibernate.validator.constraints.Range;
 
 import java.util.Comparator;
 
-/**
- * Компаратор снимков директорий
- */
 public class ComparatorSnapFile implements Comparator<SnapFile> {
-    /**
-     * Простой
-     */
+    private static final Character DOT = '.';
     public static ComparatorSnapFile defaultComparator = new ComparatorSnapFile();
 
-    /**
-     * Сравнить два снимка файлов
-     */
     @Override
     public int compare(SnapFile o1, SnapFile o2) {
-        // В начале списка выводятся директории, потом выводятся файлы
-        if (o1.isDirectory() ^ o2.isDirectory()) { // Если директория и файл
-            return Boolean.compare(!o1.isDirectory(), !o2.isDirectory());
-        }
+        return Comparator.comparing(SnapFile::isDirectory, this::compareType)
+                .thenComparing(SnapFile::getName, this::compareName)
+                .compare(o1, o2);
+    }
 
-        // Директории и файлы сортируются по алфавиту без учета регистра
-        String name1 = o1.getName().toLowerCase(); // Получили имя первого в ниж. рег.
-        String name2 = o2.getName().toLowerCase(); // Получили имя второго в ниж. рег.
-        Character dot = '.'; // Точка - начало расширения файла
+    private int compareType(boolean l, boolean r) {
+        return l ^ r ? Boolean.compare(!l, !r) : 0;
+    }
 
-        for (int i = 0, j = 0; i < name1.length() && j < name2.length(); ) {
-            char char1 = name1.charAt(i);
-            char char2 = name2.charAt(j);
-            if (dot.equals(char1) ^ dot.equals(char2)) { // Если есть начало расшрения
-                return Boolean.compare(!dot.equals(char1), !dot.equals(char2));
-            } else if (Character.isDigit(char1) ^ Character.isDigit(char2)) { // Если символ и цифра
-                return Boolean.compare(!Character.isDigit(char1), !Character.isDigit(char2)); // Сравнение признака директории
-            } else if (!Character.isDigit(char1) && !Character.isDigit(char2)) { // Если два символа
-                if (char1 != char2) { // Если символы не равны
-                    return Character.compare(char1, char2); // Сравнение символов
-                }
-                // След. символы
+    private int compareName(String l, String r) {
+        if (l.equals(r)) return 0;
+        for (int i = 0, j = 0; i < l.length() && j < r.length(); ) {
+            char char1 = l.charAt(i);
+            char char2 = r.charAt(j);
+            if (isOneDot(char1, char2)) return compareByDot(char1, char2);
+            else if (isOneNumber(char1, char2)) return compareByNumber(char1, char2);
+            else if (isTwoSymbols(char1, char2)) {
+                if (char1 != char2) return Character.compare(char1, char2);
                 i++;
                 j++;
-            } else { // Если две цифры
-                int number1 = getDigit(name1, i);
-                int number2 = getDigit(name2, j);
-                if (number1 != number2) { // Если не равны
-                    return Integer.compare(number1, number2); // Сравнение чисел
-                }
-                // Пропускаем цифры
-                i = skipDigits(name1, i);
-                j = skipDigits(name2, j);
+            } else {
+                int number1 = getDigit(l, i);
+                int number2 = getDigit(r, j);
+                if (number1 != number2) return Integer.compare(number1, number2);
+                i = skipDigits(l, i);
+                j = skipDigits(r, j);
             }
         }
         return 0;
     }
 
-    /**
-     * Пропустить в строке цифры
-     *
-     * @param value Строка
-     * @param start Начальный индекс
-     * @return Индекс который стоит после цифры
-     */
+    private int compareByDot(char l, char r) {
+        return Boolean.compare(!DOT.equals(l), !DOT.equals(r));
+    }
+
+    private int compareByNumber(char l, char r) {
+        return Boolean.compare(!Character.isDigit(l), !Character.isDigit(r));
+    }
+
+    private boolean isOneDot(char l, char r) {
+        return DOT.equals(l) ^ DOT.equals(r);
+    }
+
+    private boolean isOneNumber(char l, char r) {
+        return Character.isDigit(l) ^ Character.isDigit(r);
+    }
+
+    private boolean isTwoSymbols(char l, char r) {
+        return !Character.isDigit(l) && !Character.isDigit(r);
+    }
+
+    private int getDigit(String value, @Range(min = 0) int start) {
+        StringBuilder builder = new StringBuilder();
+        int i = start;
+        while (i < value.length() && Character.isDigit(value.charAt(i))) {
+            builder.append(value.charAt(i++));
+        }
+        return Integer.parseInt(builder.toString());
+    }
+
     private int skipDigits(String value, @Range(min = 0) int start) {
         int i = start;
         for (; i < value.length(); i++) {
@@ -72,21 +79,5 @@ public class ComparatorSnapFile implements Comparator<SnapFile> {
             }
         }
         return i;
-    }
-
-    /**
-     * Получить целое положительное число из строки
-     *
-     * @param value Строка с числом
-     * @param start Начальный индекс
-     * @return Прочитанное число
-     */
-    private int getDigit(String value, @Range(min = 0) int start) {
-        StringBuilder builder = new StringBuilder();
-        int i = start;
-        while (i < value.length() && Character.isDigit(value.charAt(i))) {
-            builder.append(value.charAt(i++));
-        }
-        return Integer.valueOf(builder.toString());
     }
 }
